@@ -14,15 +14,19 @@ import { collection, orderBy, query, where } from "firebase/firestore";
 import { firestore } from "../config/firebase-config";
 import { useDispatch, useSelector } from "react-redux";
 import { setData, setLoading, setError } from "../redux/requestSlice";
-import { setDtoLoading } from "../redux/dtoLoadingSlice";
 import Preloader from "../components/Preloader";
+import { motion } from "framer-motion";
+import { fadeDefault } from "../animations/variants";
+import Portal from "../components/Portal";
 
 function ProtectedRoutes({ allowedUser }) {
-  const { user, userToken } = useAuth();
+  const { user, userLoading, userToken } = useAuth();
   const dispatch = useDispatch();
 
   const dtoRequestsRef = collection(firestore, "requests");
+  const dtoNotificatonsRef = collection(firestore, "notifications");
   const requestQuery = query(dtoRequestsRef, orderBy("createdAt", "desc"));
+  const notification = query(dtoNotificatonsRef, where())
   const userRequestQuery = query(
     dtoRequestsRef,
     where("uid", "==", user ? user.uid : null),
@@ -33,8 +37,6 @@ function ProtectedRoutes({ allowedUser }) {
     useCollectionData(requestQuery);
   const [userRequests, userRequestFetchloading, userError] =
     useCollectionData(userRequestQuery);
-
-  const { isDtoLoading } = useSelector((state) => state.dtoLoading);
 
   const [isSidebarToggled, setIsSidebarToggled] = useState(true);
   const [showSidebar, setShowSidebar] = useState(window.innerWidth >= 960);
@@ -49,9 +51,11 @@ function ProtectedRoutes({ allowedUser }) {
   };
 
   if (window.innerWidth <= 960 && isSidebarToggled && !showSidebar) {
-    document.body.classList.add("dto-menu-shown");
+    document.body.classList.add("dto-no-scroll");
+  } else if (isCreatingRequest) {
+    document.body.classList.add("dto-no-scroll");
   } else {
-    document.body.classList.remove("dto-menu-shown");
+    document.body.classList.remove("dto-no-scroll");
   }
 
   const handleCreateRequest = () => {
@@ -60,7 +64,7 @@ function ProtectedRoutes({ allowedUser }) {
 
   useEffect(() => {
     try {
-      if (userToken.claims.admin) {
+      if (userToken?.claims.admin) {
         const stringyfiedList = JSON.stringify(adminRequestList);
         dispatch(setLoading(adminRequestFetchloading));
         if (stringyfiedList) {
@@ -100,61 +104,61 @@ function ProtectedRoutes({ allowedUser }) {
     }
   }, [showSidebar]);
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     dispatch(setDtoLoading(false));
-  //   }, 3000);
-  // }, [isDtoLoading]);
-
-  if ((isDtoLoading && adminRequestFetchloading) || userRequestFetchloading) {
+  if (userLoading || adminRequestFetchloading || userRequestFetchloading) {
     return <Preloader />;
   }
 
-  return allowedUser.includes(userToken?.claims?.admin) ? (
-    <>
-      <div className="relative">
-        <ToastContainer
-          position="bottom-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
+  return allowedUser.includes(userToken?.claims.admin) ? (
+    <motion.div
+      variants={fadeDefault}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      className="relative"
+    >
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      <div className="relative flex min-h-screen flex-col bg-white">
+        <Navbar
+          isToggled={handleDrawerToggle}
+          isCreatingRequest={handleCreateRequest}
+          setToggled={setSidebar}
         />
-        <div className="relative flex min-h-screen flex-col bg-gray-100">
-          <Navbar
-            isToggled={handleDrawerToggle}
-            isCreatingRequest={handleCreateRequest}
-            setToggled={setSidebar}
-          />
-          <AnimatePresence>
-            {isCreatingRequest && (
+        <AnimatePresence>
+          {isCreatingRequest && (
+            <Portal>
               <ModalBackdrop onClick={() => setIsCreatingRequest(false)}>
                 <RequestForm user={user} closeForm={setIsCreatingRequest} />
               </ModalBackdrop>
-            )}
-          </AnimatePresence>
-          <div className="mx-auto flex h-full w-full max-w-7xl gap-4 p-4">
-            <Sidebar
-              isToggled={showSidebar && isSidebarToggled}
-              isAdmin={userToken.claims.admin}
-            />
-            <MenuDrawer
-              isToggled={!showSidebar && isSidebarToggled}
-              isAdmin={userToken.claims.admin}
-              closeSidebar={setSidebar}
-            />
-            <main className="relative min-h-[calc(100vh_-_88px)] w-full min-w-0">
-              <Outlet context={{ isAdmin: userToken.claims.admin }} />
-            </main>
-          </div>
+            </Portal>
+          )}
+        </AnimatePresence>
+        <div className="mx-auto flex h-full w-full max-w-7xl gap-4 p-4">
+          <Sidebar
+            isToggled={showSidebar && isSidebarToggled}
+            isAdmin={userToken.claims.admin}
+          />
+          <MenuDrawer
+            isToggled={!showSidebar && isSidebarToggled}
+            isAdmin={userToken.claims.admin}
+            closeSidebar={setSidebar}
+          />
+          <main className="relative min-h-[calc(100vh_-_89px)] w-full min-w-0">
+            <Outlet context={{ isAdmin: userToken.claims.admin }} />
+          </main>
         </div>
       </div>
-    </>
+    </motion.div>
   ) : (
     <Navigate to="" />
   );

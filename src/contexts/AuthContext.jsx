@@ -1,25 +1,40 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../config/firebase-config";
 import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { AuthErrorCodes } from "firebase/auth";
+import { ERROR } from "../utils/error";
+import Preloader from "../components/Preloader";
 
 const UserAuthContext = createContext();
 
 export function AuthContextProvider({ children }) {
   const [user, setUser] = useState();
-  const [loading, setLoading] = useState(true);
+  const [userLoading, setUserLoading] = useState(true);
   const [userToken, setUserToken] = useState(null);
   // Login user with email and password
-  function loginUser(email, password) {
-    return signInWithEmailAndPassword(auth, email, password);
+  async function loginUser(email, password) {
+    setUserLoading(true);
+    return signInWithEmailAndPassword(auth, email, password).then(() => {
+      setUserLoading(false);
+    });
   }
   // Logout user
-  function logoutUser() {
-    return auth.signOut();
+  async function logoutUser() {
+    setUserLoading(true);
+    return auth
+      .signOut()
+      .then(() => {
+        setUserLoading(false);
+      })
+      .catch((error) => {
+        setUserLoading(false);
+        throw new Error(error);
+      });
   }
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      setLoading(false);
+      setUserLoading(false);
 
       if (currentUser) {
         // Fetch the user's profile data
@@ -39,11 +54,11 @@ export function AuthContextProvider({ children }) {
     return unsubscribe;
   }, []);
 
-  const value = { user, loginUser, logoutUser,  userToken };
+  const value = { user, userLoading, loginUser, logoutUser, userToken };
 
   return (
     <UserAuthContext.Provider value={value}>
-      {!loading && children}
+      {userLoading ? <Preloader /> : children}
     </UserAuthContext.Provider>
   );
 }

@@ -1,14 +1,5 @@
 import React, { useState } from "react";
-import {
-  MdMoreHoriz,
-  MdArrowDropDown,
-  MdFilterList,
-  MdChevronLeft,
-  MdChevronRight,
-  MdCheckCircle,
-  MdCancel,
-} from "react-icons/md";
-
+import { MdArrowDropDown, MdChevronLeft, MdChevronRight } from "react-icons/md";
 
 import { ACCEPTED, CANCELED, COMPLETED, PENDING } from "../utils/status";
 
@@ -152,7 +143,9 @@ function DtoTableList(props) {
           key={index}
         >
           {item.data != "createdAt"
-            ? request[item.data]
+            ? item.data === "requestId"
+              ? request[item.data].toUpperCase()
+              : request[item.data]
             : convertCreatedDate(request[item.data]?.seconds)}
         </td>
       );
@@ -188,7 +181,6 @@ function DtoTableList(props) {
   return (
     <div className="flex min-w-fit flex-col">
       <table className="table-auto border-collapse rounded-md">
-        {/* <caption className="text-2xl font-bold p-2 md:max-lg:hidden max-sm:block max-sm:p-4 text-cyan-500">Request List</caption> */}
         <thead>
           <tr className="border-b max-sm:border-0">
             {/* Header Items */}
@@ -202,7 +194,7 @@ function DtoTableList(props) {
               {handleListDisplay().map((request, index) => (
                 <tr
                   key={index}
-                  className="cursor-pointer border-b duration-150 last:border-0 hover:bg-gray-500/10 max-sm:block max-sm:rounded-2xl max-sm:border max-sm:p-4 max-sm:last:border"
+                  className="cursor-pointer border-b duration-150 hover:bg-gray-500/10 max-sm:block max-sm:rounded-2xl max-sm:border max-sm:p-4 max-sm:last:border"
                   onClick={() => props.onClick(request)}
                 >
                   {headerItems.map((item, index) =>
@@ -221,7 +213,7 @@ function DtoTableList(props) {
         </tbody>
       </table>
 
-      <div className="sticky bottom-0 right-0 top-0 mt-2 flex gap-2 self-end">
+      <div className="flex w-full justify-end gap-2 rounded-lg p-2 max-sm:mt-4 max-sm:border">
         <p className="px-4 py-2 text-xs">
           Page{" "}
           {currentPage === 1 && !Object.keys(props.list).length

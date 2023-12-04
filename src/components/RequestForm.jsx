@@ -3,13 +3,14 @@ import { IoCloseCircle } from "react-icons/io5";
 import { FaChevronDown } from "react-icons/fa";
 import Swal from "sweetalert2";
 import FormInput from "./FormInput";
-import Button from "./Button";
-import { AnimatePresence, motion } from "framer-motion";
+import DtoButton from "./DtoButton";
+import { motion } from "framer-motion";
 import successSfx from "../assets/success.mp3";
 import errorSfx from "../assets/error.mp3";
 import { dropdownAnimation, popUp, popUpItem } from "../animations/variants";
 import ApiService from "../api/apiService";
 import Validation from "../utils/Validation";
+import ResizablePanel from "./ResizablePanel";
 
 function RequestForm(props) {
   const { user, closeForm } = props;
@@ -127,20 +128,17 @@ function RequestForm(props) {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="relative flex max-w-md flex-col items-center justify-between gap-4 rounded-2xl bg-white p-6 shadow-xl"
+      className="relative m-2 flex max-w-md flex-col items-center justify-between gap-4 rounded-2xl bg-white p-6 shadow-xl"
       onSubmit={handleSubmit}
       onClick={(e) => e.stopPropagation()}
     >
-      <motion.h1
-        variants={popUpItem}
-        className="mb-4 text-center text-2xl font-black text-cyan-500"
-      >
+      <h1 className="mb-4 text-center text-2xl font-black text-cyan-500">
         Repair Requisition Form
-      </motion.h1>
+      </h1>
 
       <motion.button
         variants={popUpItem}
-        className="absolute right-0 top-0 mt-4 mr-4 text-gray-400 hover:text-gray-500"
+        className="absolute right-0 top-0 mr-4 mt-4 text-gray-400 hover:text-gray-500"
         onClick={() => closeForm(false)}
         type="button"
       >
@@ -164,41 +162,39 @@ function RequestForm(props) {
           <span>{!values.device ? "Select a device" : values.device}</span>
           <FaChevronDown />
         </div>
-        <AnimatePresence>
-          {dropdown && (
-            <motion.ul
-              variants={dropdownAnimation}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              ref={dropDownContentRef}
-              className={`absolute mt-4 w-full overflow-hidden rounded-xl bg-black/5 backdrop-blur-2xl`}
-            >
-              {devices.map((device, index) => (
-                <motion.li
-                  variants={popUpItem}
-                  key={index}
-                  className="cursor-pointer p-2 hover:bg-gray-400/50"
-                  onClick={() => handleSelectDevice(device)}
-                >
-                  {device}
-                </motion.li>
-              ))}
+        {dropdown && (
+          <motion.ul
+            variants={dropdownAnimation}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            ref={dropDownContentRef}
+            className={`absolute left-0 right-0 top-full z-10 mt-2 rounded-lg border bg-white`}
+          >
+            {devices.map((device, index) => (
               <motion.li
                 variants={popUpItem}
-                className="cursor-pointer  hover:bg-gray-400/20 "
+                key={index}
+                className="cursor-pointer p-2 hover:bg-gray-400/50"
+                onClick={() => handleSelectDevice(device)}
               >
-                <input
-                  name="device"
-                  className="w-full bg-transparent p-2 outline-none placeholder:text-gray-500"
-                  type="text"
-                  placeholder="If other, please specify here"
-                  onChange={handleOnChange}
-                />
+                {device}
               </motion.li>
-            </motion.ul>
-          )}
-        </AnimatePresence>
+            ))}
+            <motion.li
+              variants={popUpItem}
+              className="cursor-pointer hover:bg-gray-400/20 "
+            >
+              <input
+                name="device"
+                className="w-full bg-transparent p-2 outline-none placeholder:text-gray-500"
+                type="text"
+                placeholder="If other, please specify here"
+                onChange={handleOnChange}
+              />
+            </motion.li>
+          </motion.ul>
+        )}
 
         {error.device && (
           <span className="w-full text-start text-sm text-red-500">
@@ -267,7 +263,7 @@ function RequestForm(props) {
       </div>
       {/* If user request is clicked, form close button is rendered on the top right corner */}
       {/* Else cancel button is checked if props is set to true then render  */}
-      <Button
+      <DtoButton
         primary
         width="full"
         rounded="xl"

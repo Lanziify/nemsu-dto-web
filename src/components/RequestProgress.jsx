@@ -5,14 +5,17 @@ function RequestProgress({ request }) {
   const convertCreatedDate = (unixValue) => {
     const convert = new Date(unixValue * 1000);
 
-    return convert.toLocaleString("en-US", {
-      weekday: "long",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      month: "2-digit",
-      year: "2-digit",
-    });
+    return convert
+      .toLocaleString("en-PH", {
+        hour: "2-digit",
+        minute: "2-digit",
+        day: "numeric",
+        month: "2-digit",
+        year: "2-digit",
+      })
+      .replaceAll("/", "-")
+      .replace(",", "")
+      .replace('PM', "");
   };
 
   const progressItems = [
@@ -58,19 +61,19 @@ function RequestProgress({ request }) {
             className={`m-auto mb-2 w-fit rounded-full border-4  bg-white p-5 ${
               item.active
                 ? "border-cyan-500 text-cyan-500"
-                : " border-gray-200 text-gray-200"
+                : " border-gray-300 text-gray-200"
             }`}
           >
             {item.icon}
           </div>
-          <p className="font-bold">{item.title}</p>
+          <p className={`font-bold ${item.active ? "" : "text-gray-300"}`}>{item.title}</p>
           <p className="text-gray-500">{item.date}</p>
         </div>
       ))}
       <div className="absolute top-10 h-[4px] w-full">
-        <div className="absolute mx-24 h-full w-[calc(100%_-_192px)] bg-gray-200"></div>
+        <div className="absolute mx-24 h-full w-[calc(100%_-_192px)] bg-gray-300 max-sm:hidden"></div>
         <div
-          className={`absolute mx-24 h-full ${getStepBar()} bg-cyan-500`}
+          className={`absolute mx-24 h-full  max-sm:hidden ${getStepBar()} bg-cyan-500`}
         ></div>
       </div>
     </div>

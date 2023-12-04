@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Notfound() {
   return (
-    <div className="flex h-full w-full items-center">
+    <div className="flex h-screen w-screen items-center justify-center">
       <div className="m-auto text-center">
         <h1 className="mb-2 text-9xl font-black text-cyan-500">
           404

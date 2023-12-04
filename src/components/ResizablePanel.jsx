@@ -33,7 +33,7 @@ function ResizablePanel({ children, direction }) {
   return (
     <motion.div
       animate={{ height: height || "auto" }}
-      className={`${height ? "relative" : "absolute"}`}
+      className={`${height ? "relative" : "absolute"} w-full`}
     >
       <AnimatePresence initial={false} mode="sync" custom={{direction}}>
         <motion.div
@@ -50,6 +50,7 @@ function ResizablePanel({ children, direction }) {
             staggerChildren: 0.05,
           }}
           custom={{direction}}
+          className=""
         >
           <div
             ref={ref}

@@ -1,8 +1,8 @@
 import axios from "axios";
-const BASE_URL = "http://localhost:3000/api/dto";
+const BASE_URL = import.meta.env.VITE_REACT_APP_BASE_URL;
 
-class ApiService {
-  static async registerUser(data, token) {
+const ApiService = {
+  registerUser: async (data, token) => {
     try {
       await axios.post(
         `${BASE_URL}/register`,
@@ -16,8 +16,15 @@ class ApiService {
     } catch (error) {
       throw new Error(error.response.data.message);
     }
-  }
-  static async createRequest(data, token) {
+  },
+  getUsers: async () => {
+    try {
+      return await axios.get(`${BASE_URL}/users`);
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+  createRequest: async (data, token) => {
     try {
       await axios.post(
         `${BASE_URL}/create`,
@@ -31,24 +38,24 @@ class ApiService {
     } catch (error) {
       throw new Error(error.message);
     }
-  }
-  static async fetchNotifications(userId) {
+  },
+  fetchNotifications: async (userId) => {
     try {
       return await axios.get(`${BASE_URL}/notification/${userId}`);
     } catch (error) {}
-  }
-  static async updateFcm(userId, token) {
+  },
+  updateFcm: async (userId, token) => {
     try {
       return await axios.put(`${BASE_URL}/fcm`, {
         uid: userId,
         fcmToken: token,
       });
     } catch (error) {}
-  }
-  static async fetchRequest(userId) {
+  },
+  fetchRequest: async (userId) => {
     return await axios.get(`${BASE_URL}/user/requests/${userId}`);
-  }
-  static async fetchUserRequests() {
+  },
+  fetchUserRequests: async () => {
     try {
       return await axios.get(`${BASE_URL}/requests`);
     } catch (error) {
@@ -59,8 +66,8 @@ class ApiService {
       }
       throw new Error(error.message);
     }
-  }
-  static async createResponse(requestId, status) {
+  },
+  createResponse: async (requestId, status) => {
     try {
       await axios.put(`${BASE_URL}/request/${requestId}`, {
         status,
@@ -68,8 +75,8 @@ class ApiService {
     } catch (error) {
       throw new Error(error.message);
     }
-  }
-  static async completeRequest(requestId, status, data) {
+  },
+  completeRequest: async (requestId, status, data) => {
     try {
       await axios.put(`${BASE_URL}/request/${requestId}`, {
         status: status,
@@ -78,12 +85,12 @@ class ApiService {
     } catch (error) {
       throw new Error(error.message);
     }
-  }
-  static async readNotification(notificationId) {
+  },
+  readNotification: async (notificationId) => {
     try {
       await axios.put(`${BASE_URL}/notification/${notificationId}`);
     } catch (error) {}
-  }
-}
+  },
+};
 
 export default ApiService;

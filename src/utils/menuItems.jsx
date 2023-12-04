@@ -1,31 +1,41 @@
+import { MdSpaceDashboard, MdOutlineSpaceDashboard } from "react-icons/md";
 import {
-  MdHome,
-  MdSpaceDashboard,
-  MdEditDocument,
-  MdHistory
-} from "react-icons/md";
-import { IoPeople, IoDocuments, IoNotifications } from "react-icons/io5";
+  IoPeople,
+  IoDocuments,
+  IoNotifications,
+  IoNotificationsOutline,
+  IoDocumentsOutline,
+  IoTime,
+  IoTimeOutline,
+  IoHome,
+  IoHomeOutline,
+  IoPeopleOutline,
+} from "react-icons/io5";
 
 export const userItems = [
   {
     path: "/home",
     name: "Home",
-    icon: <MdHome size={24} />,
+    inactiveIcon: <IoHomeOutline size={18} />,
+    icon: <IoHome size={18} />,
   },
   {
     path: "/notifications",
     name: "Notifications",
-    icon: <IoNotifications size={24} />,
+    inactiveIcon: <IoNotificationsOutline size={18} />,
+    icon: <IoNotifications size={18} />,
   },
   {
     path: "/request",
     name: "Requests",
-    icon: <MdEditDocument size={24} />,
+    inactiveIcon: <IoDocumentsOutline size={18} />,
+    icon: <IoDocuments size={18} />,
   },
   {
     path: "/history",
     name: "History",
-    icon: <MdHistory size={24} />,
+    inactiveIcon: <IoTimeOutline size={18} />,
+    icon: <IoTime size={18} />,
   },
 ];
 
@@ -33,21 +43,25 @@ export const adminItems = [
   {
     path: "/dashboard",
     name: "Dashboard",
-    icon: <MdSpaceDashboard size={24} />,
+    inactiveIcon: <MdOutlineSpaceDashboard size={18} />,
+    icon: <MdSpaceDashboard size={18} />,
   },
   {
     path: "/notifications",
     name: "Notifications",
-    icon: <IoNotifications size={24} />,
+    inactiveIcon: <IoNotificationsOutline size={18} />,
+    icon: <IoNotifications size={18} />,
   },
   {
     path: "/users",
     name: "Manage Users",
-    icon: <IoPeople size={24} />,
+    inactiveIcon: <IoPeopleOutline size={18} />,
+    icon: <IoPeople size={18} />,
   },
   {
     path: "/list",
     name: "Request List",
-    icon: <IoDocuments size={24} />,
+    inactiveIcon: <IoDocumentsOutline size={18} />,
+    icon: <IoDocuments size={18} />,
   },
 ];

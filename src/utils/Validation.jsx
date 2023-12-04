@@ -1,8 +1,8 @@
-class Validation {
-  static validateLogin = (values) => {
+export const Validation = {
+  validateLogin: (values) => {
     const errorMessage = {};
     const regex =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 
     // Login form validitions
     // Email validation
@@ -16,9 +16,9 @@ class Validation {
       errorMessage.password = "Password is required";
     }
     return errorMessage;
-  };
+  },
 
-  static validateRegistration = (values) => {
+  validateRegistration: (values) => {
     const errorMessage = {};
     const emailRegex =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -43,9 +43,9 @@ class Validation {
     }
 
     return errorMessage;
-  };
+  },
 
-  static validateRequest = (values) => {
+  validateRequest: (values) => {
     const errorMessage = {};
     const deviceRegex = /^[a-zA-Z]+$/;
 
@@ -63,9 +63,9 @@ class Validation {
     }
 
     return errorMessage;
-  };
+  },
 
-  static validateResponse = (values) => {
+  validateResponse: (values) => {
     const errorMessage = {};
 
     if (!values.actionTaken) {
@@ -76,7 +76,7 @@ class Validation {
     }
 
     return errorMessage;
-  };
-}
+  },
+};
 
 export default Validation;

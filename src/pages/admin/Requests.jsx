@@ -8,9 +8,7 @@ import {
   MdThumbUpOffAlt,
   MdDoneAll,
   MdOutlineCancel,
-  MdFilterList,
 } from "react-icons/md";
-import { BsFiles, BsFilesAlt } from "react-icons/bs";
 import LineChart from "../../components/LineChart";
 import DoughnutChart from "../../components/DoughnutChart";
 import AnimatedNumber from "../../components/AnimatedNumber";
@@ -44,9 +42,9 @@ export default function Requests() {
   const [searchedRequest, setSearchedRequest] = useState();
 
   const status = [
-    { status: PENDING, style: "text-yellow-500" },
-    { status: ACCEPTED, style: "text-teal-500" },
-    { status: COMPLETED, style: "text-cyan-500" },
+    { status: PENDING, style: "bg-yellow-500" },
+    { status: ACCEPTED, style: "bg-teal-500" },
+    { status: COMPLETED, style: "bg-cyan-500" },
   ];
 
   const tabItems = [
@@ -131,21 +129,14 @@ export default function Requests() {
           reverseButtons: true,
         }).then((result) => {
           if (result.isConfirmed) {
-            // setIsResponding(true);
-            ApiService.createResponse(requestId, status).then(() => {
-              // setIsResponding(false);
-            });
+            ApiService.createResponse(requestId, status).then(() => {});
           }
           if (result.isDismissed) {
-            // setIsResponding(false);
           }
         });
         return;
       }
-
-      // setIsResponding(true);
       await ApiService.createResponse(requestId, status);
-      // setIsResponding(false);
     } catch (error) {
       console.log(error);
     }
@@ -168,30 +159,25 @@ export default function Requests() {
 
   return !fetchingRequests ? (
     <>
-      <div className="mb-4 grid grid-cols-3 gap-4 [&>div]:rounded-2xl [&>div]:shadow-sm">
-        <div className="col-span-2 h-48 flex-1 overflow-hidden bg-white p-4 max-sm:p-0 max-sm:col-span-full">
+      <div className="mb-4 grid grid-cols-3 gap-4 [&>div]:rounded-2xl [&>div]:border">
+        <div className="col-span-2 h-56 overflow-hidden bg-white p-1 max-sm:col-span-full max-sm:p-0">
           <LineChart requests={requests} />
         </div>
-        <div className="flex-1 bg-white p-4 max-sm:col-span-full">
+        <div className="flex h-56 flex-1 items-center justify-center bg-whit max-sm:col-span-full">
           <DoughnutChart requests={requests} />
         </div>
         {status.map((item, index) => (
           <div
-            className={`relative flex flex-1 items-center justify-center bg-white p-4 ${item.style} overflow-hidden`}
+            className={`h-fit flex-1 p-4 text-center text-white ${item.style}`}
             key={index}
           >
-            <div className="absolute -left-4 top-0 rotate-45 opacity-20 blur-md">
-              <BsFiles size={125} />
-            </div>
-            <div className="absolute -right-4 bottom-0 -rotate-12 opacity-20 blur-md">
-              <BsFilesAlt size={125} />
-            </div>
-            <div className="text-center font-bold ">
-              <div className="text-7xl">
-                <AnimatedNumber number={getStatusTotal(item.status)} />
-              </div>
-              <p className="text-xs">Total {item.status} Requests</p>
-            </div>
+            <AnimatedNumber
+              number={getStatusTotal(item.status)}
+              className="text-6xl font-bold"
+            />
+            <p className="mb-2 text-xs font-bold">
+              {item.status} Requests
+            </p>
           </div>
         ))}
       </div>
@@ -236,7 +222,7 @@ export default function Requests() {
         </div>
       </div>
 
-      <div className="rounded-2xl bg-white p-6 text-sm shadow-sm max-sm:p-4">
+      <div className="rounded-2xl border bg-white text-sm max-sm:border-none">
         <div className="overflow-x-auto rounded-md">
           <AnimatePresence initial={false}>
             <DtoTableList

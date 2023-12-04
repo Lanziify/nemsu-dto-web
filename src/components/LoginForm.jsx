@@ -2,21 +2,22 @@ import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import FormInput from "./FormInput";
 import dtoLogo from "../assets/dtoLogo.svg";
-import Button from "./Button";
+import DtoButton from "./DtoButton";
 import Validation from "../utils/Validation";
-import Preloader from "./Preloader";
-import { useDispatch } from "react-redux";
-import { setDtoLoading } from "../redux/dtoLoadingSlice";
+import { popUpItem } from "../animations/variants";
+import { motion } from "framer-motion";
+import { ERROR } from "../utils/error";
+import { AuthErrorCodes } from "firebase/auth";
 
 function LoginForm() {
   const { loginUser } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [values, setValues] = useState({
     email: "",
     password: "",
   });
   const [firebaseError, setFirebaseError] = useState();
   const [error, setError] = useState({});
-  const dispatch = useDispatch()
 
   // Assign the inputs of the selected field to the target name of state values
   // Clear the error when input changes
@@ -32,35 +33,45 @@ function LoginForm() {
       setError(formErrors);
     } else {
       try {
-        dispatch(setDtoLoading(true))
+        setLoading(true);
         await loginUser(values.email, values.password);
+        setLoading(false);
       } catch (error) {
-        setFirebaseError("Incorrect email address or password");
+        const errorMessage = ERROR.loginError(error, AuthErrorCodes);
+        setFirebaseError(errorMessage.firebaseError);
+        setLoading(false);
       }
     }
   }
 
   return (
     <>
-      <form
-        className="flex w-96 min-w-0 flex-col items-center gap-4 rounded-2xl bg-white px-8 pb-8 pt-6 shadow-sm"
+      <motion.form
+        variants={popUpItem}
+        className="flex w-full max-w-md flex-1 flex-col items-center gap-4 rounded-2xl bg-white px-8 pb-8 pt-6 shadow-sm"
         onSubmit={handleSubmit}
       >
         {/* <div className="h-24 min-w-[96px] rounded-full border bg-gradient-to-br from-cyan-100 to-cyan-500"></div> */}
         <div className="rounded-full p-2">
           <img src={dtoLogo} alt="DTO logo" className="h-14 w-14" />
         </div>
-        <span className="text-lg font-bold text-gray-500">
-          Log in to your account
-        </span>
-        {firebaseError && <span className="text-red-500">{firebaseError}</span>}
+
+        {firebaseError && (
+          <motion.div
+            variants={popUpItem}
+            className="w-full rounded-md bg-red-500 p-1 text-center"
+          >
+            <span className="text-white">{firebaseError}</span>
+          </motion.div>
+        )}
         <FormInput
           name="email"
           type="email"
           value={values.email}
-          placeholder="name@example.com"
+          placeholder="Email@example.com"
           error={error.email}
           onChange={handleOnChange}
+          showEmailIcon
         />
         <FormInput
           name="password"
@@ -69,16 +80,18 @@ function LoginForm() {
           placeholder="Password"
           error={error.password}
           onChange={handleOnChange}
+          showPasswordIcon
+          enableShowPassword
         />
-        <span className="text-gray-400">Forgot password?</span>
-        <Button
+        <DtoButton
+          loading={loading}
           primary
           width="full"
           rounded="lg"
-          buttonText="Sign in"
+          buttonText="Login"
           type="submit"
         />
-      </form>
+      </motion.form>
     </>
   );
 }

@@ -1,18 +1,12 @@
 import React, { useState } from "react";
 import { MdChevronLeft } from "react-icons/md";
 import FormInput from "./FormInput";
-import Button from "./Button";
+import DtoButton from "./DtoButton";
 import ApiService from "../api/apiService";
 import Validation from "../utils/Validation";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import {
-  carousell,
-  dropdownAnimation,
-  fadeDefault,
-  popUp,
-  popUpItem,
-} from "../animations/variants";
+import { popUpItem } from "../animations/variants";
 
 function ResponseForm(props) {
   const { activeForm, requestId, setLoading } = props;
@@ -128,7 +122,7 @@ function ResponseForm(props) {
         )}
       </div>
       <motion.div variants={popUpItem} className="flex gap-4">
-        <Button
+        <DtoButton
           secondary
           type="button"
           rounded="xl"
@@ -139,7 +133,7 @@ function ResponseForm(props) {
             !formLoading ? activeForm(false) : null;
           }}
         />
-        <Button
+        <DtoButton
           primary
           type="submit"
           rounded="xl"

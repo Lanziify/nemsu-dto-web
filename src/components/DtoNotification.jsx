@@ -1,7 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import getTimeAgo from "../utils/getTimeAgo";
-import { motion } from "framer-motion";
-import { popUpItem } from "../animations/variants";
 
 function DtoNotification(props) {
   const { notifications, selectedNotification } = props;
@@ -10,12 +8,20 @@ function DtoNotification(props) {
     (a, b) => b.createdAt._seconds - a.createdAt._seconds
   );
 
+  if (notifications.length === 0)
+    return (
+      <div className="flex flex-col gap-2">
+        <Skeleton opacity={1} />
+        <Skeleton opacity={0.5} />
+        <Skeleton opacity={0.1}/>
+      </div>
+    );
+
   return (
     <>
       {sortedNotifications.map((notification, index) => (
-        <motion.div
-          variants={popUpItem}
-          className="relative cursor-pointer rounded-xl text-sm hover:bg-gray-500/10"
+        <div
+          className="relative cursor-pointer rounded-xl text-sm hover:bg-black/5"
           key={index}
           onClick={() => {
             selectedNotification(notification);
@@ -50,9 +56,18 @@ function DtoNotification(props) {
               <div className=" h-2 w-2 rounded-full bg-cyan-500"></div>
             )}
           </div>
-        </motion.div>
+        </div>
       ))}
     </>
+  );
+}
+function Skeleton(props) {
+  return (
+    <div className="flex animate-pulse flex-col gap-2 rounded-xl bg-gray-200 p-2" style={{opacity: props.opacity}}>
+      <div className="w-48 animate-pulse rounded-lg bg-gray-400 p-2"></div>
+      <div className="animate-pulse rounded-lg bg-gray-300 p-2"></div>
+      <div className="w-[15%] animate-pulse rounded-lg bg-gray-300 p-2"></div>
+    </div>
   );
 }
 

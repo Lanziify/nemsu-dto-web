@@ -18,19 +18,22 @@ const DtoSearchBar = (props) => {
   );
 
   useEffect(() => {
-    const outsideClick = (e) => {
-      if (
+    if (props.filterEnable) {
+
+      const outsideClick = (e) => {
+        if (
         !popperReference.current.contains(e.target) &&
         !popperElement.current.contains(e.target)
       ) {
         setShowFilter(false);
       }
     };
-
+    
     document.addEventListener("mousedown", outsideClick);
     return () => {
       document.removeEventListener("mousedown", outsideClick);
     };
+  }
   }, []);
 
   return (
@@ -44,7 +47,7 @@ const DtoSearchBar = (props) => {
       <div className="flex flex-1 items-center">
         <FaSearch className="absolute ml-4 text-gray-400" size={18} />
         <input
-          className="w-full rounded-full bg-white p-2 pl-[48px] text-gray-400 shadow-sm outline-none"
+          className="w-full rounded-full bg-white p-2 pl-[48px] text-gray-400 border outline-none"
           type="text"
           placeholder="Search"
           onChange={props.onSearchChange}
@@ -54,7 +57,7 @@ const DtoSearchBar = (props) => {
         <>
           <div
             ref={popperReference}
-            className="no_selection relative m-auto w-fit cursor-pointer rounded-full bg-white p-2 shadow-sm duration-300 hover:bg-gray-200"
+            className="no_selection relative m-auto w-fit cursor-pointer rounded-full bg-white p-2 border duration-300 hover:bg-gray-200"
             onClick={() => {
               setShowFilter(!showFilter);
             }}

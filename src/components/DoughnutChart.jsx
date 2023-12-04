@@ -1,5 +1,5 @@
 import React from "react";
-import { Doughnut } from "react-chartjs-2";
+import { Pie } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   Legend,
@@ -10,7 +10,8 @@ import {
   LinearScale,
   PointElement,
 } from "chart.js";
-import { getMonth } from "../utils/timeUtils";
+
+import ChartDataLabels from "chartjs-plugin-datalabels";
 
 ChartJS.register(
   Legend,
@@ -22,42 +23,71 @@ ChartJS.register(
   PointElement
 );
 
-function DoughnutChart({ requests }) {
+function DoughnutChart({requests}) {
+  
+  if (requests.length < 0) {
+    return <div>No requests to display</div>;
+  }
+
+  const calculatePercentage = (deviceCount, totalRequests) => {
+    return ((deviceCount / totalRequests) * 100).toFixed(0);
+  };
+
+  
+  const devices = requests.map((request) => request.device);
+
+  const deviceCounts = devices.reduce((acc, device) => {
+    acc[device] = (acc[device] || 0) + 1;
+
+    return acc;
+  }, {});
+
+
   const data = {
-    labels: ["Network", "Printer", "Laptop", "Desktop"],
+    labels: Object.keys(deviceCounts),
     datasets: [
       {
         label: "Request",
-        data: [4, 6, 10, 2],
+        data: Object.values(deviceCounts),
         backgroundColor: ["#06B6D4", "#00CACE", "#32DBBC", "#78E9A1"],
         borderWidth: 5,
-        // pointBorder: 4,
       },
     ],
   };
 
   const options = {
+
     responsive: true,
-    maintainAspectRatio: false,
-    // cutout: 50,
+    cutout: 45,
     plugins: {
       legend: {
-        position: "right",
-        align: "center",
+        position: "bottom",
+        textAlign: "left",
         labels: {
           usePointStyle: true,
           boxWidth: 20,
         },
       },
+      title: {
+        display: true,
+        text: "Device Request",
+      },
+      datalabels: {
+        clamp: true,
+        anchor: "end",
+        align: "end",
+        font: {
+          weight: "bold",
+        },
+        formatter: function(value, context) {
+          return value + ", " +  calculatePercentage(value, requests.length) + '%';
 
+        }
+      },
     },
   };
 
-  return (
-    <div className="h-full">
-      <Doughnut data={data} options={options} />
-    </div>
-  );
+  return <Pie data={data} plugins={[ChartDataLabels]} options={options} />;
 }
 
 export default DoughnutChart;

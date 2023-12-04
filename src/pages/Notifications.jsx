@@ -4,9 +4,10 @@ import DtoNotification from "../components/DtoNotification";
 import { useNavigate } from "react-router-dom";
 import { readNotification } from "../redux/readNotificationSlice";
 
-export default function Notifications() {
+const Notifications = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  
   const { notifications, unread } = useSelector((state) => state.notifications);
 
   const { requests } = useSelector((state) => state.requests);
@@ -24,7 +25,7 @@ export default function Notifications() {
   };
 
   return (
-    <div className="rounded-2xl bg-white p-6 text-sm shadow-sm">
+    <div className="rounded-2xl bg-white text-sm ">
       <div className="mb-2 text-2xl font-bold">Notifications</div>
       <DtoNotification
         notifications={notifications}
@@ -33,3 +34,5 @@ export default function Notifications() {
     </div>
   );
 }
+
+export default Notifications

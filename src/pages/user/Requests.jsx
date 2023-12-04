@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../../contexts/AuthContext";
 import DtoTableList from "../../components/DtoTableList";
-import {
-  MdHourglassEmpty,
-  MdThumbUpOffAlt,
-  MdDoneAll,
-  MdOutlineCancel,
-} from "react-icons/md";
-import ApiService from "../../api/apiService";
+import { MdHourglassEmpty, MdThumbUpOffAlt } from "react-icons/md";
 import DtoSearchBar from "../../components/DtoSearchBar";
 import { filterItems } from "../../utils/filterItems";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -134,7 +127,7 @@ export default function Requests() {
         />
       </div>
 
-      <div className="rounded-2xl bg-white p-6 text-sm shadow-sm max-sm:p-4">
+      <div className="rounded-2xl border bg-white text-sm max-sm:border-none">
         <div className="overflow-x-auto rounded-md">
           <DtoTableList
             list={filteredList}

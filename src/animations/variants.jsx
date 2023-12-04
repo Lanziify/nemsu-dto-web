@@ -4,6 +4,11 @@ export const fadeDefault = {
   },
   animate: {
     opacity: 1,
+    transition: {
+      duration: .48,
+      staggerChildren: .1,
+      
+    },
   },
   exit: {
     opacity: 0,
@@ -21,6 +26,7 @@ export const drawerAnimation = {
       stiffness: 100,
       mass: 0.1,
       delayChildren: 0,
+      // duration: .4,
       staggerChildren: 0.03,
     },
   },
@@ -31,6 +37,7 @@ export const drawerAnimation = {
       damping: 7.8,
       stiffness: 100,
       mass: 0.4,
+      // duration: .4,
     },
   },
 };
@@ -86,11 +93,11 @@ export const drawerItems = {
 export const dropdownAnimation = {
   initial: {
     opacity: 0,
-    clipPath: "inset(0% 50% 90% 50% round 16px)",
+    clipPath: "inset(0% 50% 90% 50% round 8px)",
   },
   animate: {
     opacity: 1,
-    clipPath: "inset(0% 0% 0% 0% round 16px)",
+    clipPath: "inset(0% 0% 0% 0% round 8px)",
     transition: {
       delayChildren: 0,
       staggerChildren: 0.04,
@@ -98,7 +105,7 @@ export const dropdownAnimation = {
   },
   exit: {
     opacity: 0,
-    clipPath: "inset(0% 50% 90% 50% round 16px)",
+    clipPath: "inset(0% 50% 90% 50% round 8px)",
   },
 };
 
@@ -151,9 +158,10 @@ export const popUpItem = {
     y: 0,
     transition: {
       type: "spring",
-      damping: 7.8,
-      stiffness: 100,
-      mass: 0.22,
+      damping: 12.8,
+      stiffness: 86,
+      mass: .08,
+      duration: 1,
     },
   },
   exit: {

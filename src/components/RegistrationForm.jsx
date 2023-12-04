@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { FaChevronDown } from "react-icons/fa";
 import Swal from "sweetalert2";
 import FormInput from "./FormInput";
-import Button from "./Button";
+import DtoButton from "./DtoButton";
 import { dropdownAnimation, popUp, popUpItem } from "../animations/variants";
 import Validation from "../utils/Validation";
 import ApiService from "../api/apiService";
@@ -135,7 +135,7 @@ function RegistrationForm(props) {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="relative flex h-full flex-col items-center justify-center gap-4 rounded-2xl border-gray-100 bg-white p-6 shadow-sm"
+      className="relative flex h-full flex-col items-center justify-center gap-4 rounded-2xl border bg-white p-6"
       onSubmit={handleRegistration}
     >
       <motion.h1
@@ -154,17 +154,12 @@ function RegistrationForm(props) {
         error={error.name}
         onChange={handleOnChange}
       />
-      <motion.div
-        variants={popUpItem}
-        className="relative w-full text-gray-500 "
-      >
-        <p className="mb-1 w-full text-xs font-medium text-gray-400 ">
-          Position
-        </p>
+      <motion.div variants={popUpItem} className="relative w-full">
+        <p className="mb-1 w-full text-xs font-medium">Position</p>
         <ResizablePanel>
           <div
             ref={dropDownButtonRef}
-            className={`flex place-items-center justify-between rounded-xl border p-2 ${
+            className={`flex select-none place-items-center justify-between rounded-xl border p-2 ${
               !values.device ? "text-gray-400" : ""
             }`}
             onClick={() => setDropdown(!dropdown)}
@@ -182,7 +177,7 @@ function RegistrationForm(props) {
               animate="animate"
               exit="exit"
               ref={dropDownContentRef}
-              className={`mb-2 mt-4 max-h-48 w-full overflow-auto rounded-md bg-black/5 backdrop-blur-2xl`}
+              className={`mb-2 mt-4 max-h-48 w-full overflow-auto rounded-lg border`}
             >
               {position.map((position, index) => (
                 <motion.li
@@ -229,16 +224,12 @@ function RegistrationForm(props) {
         value={values.password}
         placeholder="Password"
         error={error.password}
+        enableShowPassword
         onChange={handleOnChange}
       />
-      <motion.div variants={popUpItem} className="w-full">
-        <Button
-          primary
-          width="full"
-          rounded="xl"
-          type="submit"
-          buttonText="Register"
-        />
+      <motion.div variants={popUpItem} className="flex w-full gap-4">
+        <DtoButton secondary width="full" type="button" buttonText="Cancel" onClick={props.onCancelClick} />
+        <DtoButton primary width="full" type="submit" buttonText="Register" />
       </motion.div>
     </motion.form>
   );

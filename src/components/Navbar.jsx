@@ -19,7 +19,6 @@ import { toast } from "react-toastify";
 import notificationRingtone from "../assets/notification.mp3";
 import ApiService from "../api/apiService";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchNotifications } from "../redux/notificationSlice";
 import { readNotification } from "../redux/readNotificationSlice";
 import dtoLogo from "../assets/dtoLogo.svg";
 
@@ -29,14 +28,11 @@ function Navbar(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { notifications, unreads, showUnreads } = useSelector(
+  const { notifications, unreads } = useSelector(
     (state) => state.notifications
   );
 
   const { requests } = useSelector((state) => state.requests);
-  const { isReadingNotifiation } = useSelector(
-    (state) => state.readNotification
-  );
 
   const [isProfileToggled, setIsProfileToggled] = useState(false);
   const [isNotificationToggled, setIsNotificationToggled] = useState(false);
@@ -118,12 +114,20 @@ function Navbar(props) {
     } else {
       setIsProfileToggled(!isNotificationToggled);
     }
-  }
+  };
 
   const handleSelectedNotification = (notification) => {
     if (!notification.read) {
       dispatch(readNotification(notification.notificationId));
     }
+
+    if (!notification?.data) {
+      const id = notification.body
+        .slice(notification.body.indexOf("#") + 1)
+        .split(" ")[0];
+      navigate(`/notifications/request/${id}`);
+    }
+
     const selected = requests.find((request) => {
       return request.requestId === notification.data.requestId;
     });
@@ -164,11 +168,6 @@ function Navbar(props) {
   }, []);
 
   useEffect(() => {
-    dispatch(fetchNotifications(user.uid));
-    // dispatch(fetchRequests());
-  }, [isReadingNotifiation]);
-
-  useEffect(() => {
     const handleClickOutside = (e) => {
       if (
         isNotificationToggled &&
@@ -198,9 +197,9 @@ function Navbar(props) {
   }, [isNotificationToggled, isProfileToggled]);
 
   return (
-    <header className="select-none sticky top-0 z-10 border-b bg-white text-sm">
+    <header className="sticky top-0 z-10 select-none border-b bg-white text-sm">
       {/* Left side div */}
-      <div className="select-none mx-auto flex max-w-7xl justify-between px-4 py-2">
+      <div className="mx-auto flex max-w-7xl select-none justify-between px-4 py-2">
         <div className="flex items-center gap-4">
           {/* Hamburger */}
           <div
@@ -210,7 +209,10 @@ function Navbar(props) {
             <IoMenu size={24} />
           </div>
 
-          <div className="cursor-pointer flex items-center gap-2" onClick={() => navigate('/')}>
+          <div
+            className="flex cursor-pointer items-center gap-2"
+            onClick={() => navigate("/")}
+          >
             {/* <div className="h-[36px] min-w-[36px] rounded-full border bg-gradient-to-br from-cyan-100 to-cyan-500"></div> */}
             <img
               src={dtoLogo}
@@ -232,21 +234,28 @@ function Navbar(props) {
               onClick={isCreatingRequest}
             />
           )}
-          
+
           {/* Notification */}
           <div
             className="relative flex items-center p-1"
             onClick={handleNotificationClick}
           >
-            <div className="select-none cursor-pointer" ref={notificationButton}>
+            <div
+              className="cursor-pointer select-none"
+              ref={notificationButton}
+            >
               <IoNotificationsOutline size={24} />
-              {unreads ? (
+              {notifications
+                .map((notification) => {
+                  return notification.read;
+                })
+                .includes(false) ? (
                 <div
                   className="absolute right-0 top-0 flex h-5 w-5 select-none items-center justify-center rounded-full border-2 border-white bg-cyan-500 text-white"
                   onClick={handleNotificationClick}
                 >
                   <span className="absolute -z-10 h-4 w-4 animate-ping rounded-full bg-cyan-500"></span>
-                  <p className="text-[10px]">{unreads}</p>
+                  {/* <p className="text-[10px]">{unreads}</p> */}
                 </div>
               ) : null}
             </div>

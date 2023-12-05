@@ -18,6 +18,7 @@ import Preloader from "../components/Preloader";
 import { motion } from "framer-motion";
 import { fadeDefault } from "../animations/variants";
 import Portal from "../components/Portal";
+import { getNotifications } from "../redux/notificationSlice";
 
 function ProtectedRoutes({ allowedUser }) {
   const { user, userLoading, userToken } = useAuth();
@@ -26,7 +27,13 @@ function ProtectedRoutes({ allowedUser }) {
   const dtoRequestsRef = collection(firestore, "requests");
   const dtoNotificatonsRef = collection(firestore, "notifications");
   const requestQuery = query(dtoRequestsRef, orderBy("createdAt", "desc"));
-  const notification = query(dtoNotificatonsRef, where())
+
+  const notificationsQuery = query(
+    dtoNotificatonsRef,
+    where("receiverId", "==", user ? user.uid : null),
+    orderBy("createdAt", "desc")
+  );
+
   const userRequestQuery = query(
     dtoRequestsRef,
     where("uid", "==", user ? user.uid : null),
@@ -35,8 +42,12 @@ function ProtectedRoutes({ allowedUser }) {
 
   const [adminRequestList, adminRequestFetchloading, adminError] =
     useCollectionData(requestQuery);
+
   const [userRequests, userRequestFetchloading, userError] =
     useCollectionData(userRequestQuery);
+
+  const [dtoNotifications, fetchingDtoNotifications, dtoNotifFetchError] =
+    useCollectionData(notificationsQuery);
 
   const [isSidebarToggled, setIsSidebarToggled] = useState(true);
   const [showSidebar, setShowSidebar] = useState(window.innerWidth >= 960);
@@ -66,7 +77,6 @@ function ProtectedRoutes({ allowedUser }) {
     try {
       if (userToken?.claims.admin) {
         const stringyfiedList = JSON.stringify(adminRequestList);
-        dispatch(setLoading(adminRequestFetchloading));
         if (stringyfiedList) {
           const parsedList = JSON.parse(stringyfiedList);
           dispatch(setData(parsedList));
@@ -83,6 +93,15 @@ function ProtectedRoutes({ allowedUser }) {
       console.log(error);
     }
   }, [adminRequestList, userRequests]);
+
+  useEffect(() => {
+    const stringyfiedNotifications = JSON.stringify(dtoNotifications);
+    if (stringyfiedNotifications) {
+      const parsedNotifications = JSON.parse(stringyfiedNotifications);
+      dispatch(getNotifications(parsedNotifications));
+      // dispatch(fetchNotifications(parsedNotifications));
+    }
+  }, [dtoNotifications]);
 
   useEffect(() => {
     const handleResize = () => {

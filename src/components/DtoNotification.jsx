@@ -4,22 +4,22 @@ import getTimeAgo from "../utils/getTimeAgo";
 function DtoNotification(props) {
   const { notifications, selectedNotification } = props;
 
-  const sortedNotifications = [...notifications].sort(
-    (a, b) => b.createdAt._seconds - a.createdAt._seconds
-  );
+  // const sortedNotifications = [...notifications].sort(
+  //   (a, b) => b.createdAt._seconds - a.createdAt._seconds
+  // );
 
   if (notifications.length === 0)
     return (
       <div className="flex flex-col gap-2">
         <Skeleton opacity={1} />
         <Skeleton opacity={0.5} />
-        <Skeleton opacity={0.1}/>
+        <Skeleton opacity={0.1} />
       </div>
     );
-
+    
   return (
     <>
-      {sortedNotifications.map((notification, index) => (
+      {notifications.map((notification, index) => (
         <div
           className="relative cursor-pointer rounded-xl text-sm hover:bg-black/5"
           key={index}
@@ -49,7 +49,7 @@ function DtoNotification(props) {
                   !notification.read ? "text-cyan-500" : "text-gray-400"
                 }`}
               >
-                {getTimeAgo(notification.createdAt?._seconds)}
+                {getTimeAgo(notification.createdAt?.seconds)}
               </p>
             </div>
             {!notification?.read && (
@@ -63,7 +63,10 @@ function DtoNotification(props) {
 }
 function Skeleton(props) {
   return (
-    <div className="flex animate-pulse flex-col gap-2 rounded-xl bg-gray-200 p-2" style={{opacity: props.opacity}}>
+    <div
+      className="flex animate-pulse flex-col gap-2 rounded-xl bg-gray-200 p-2"
+      style={{ opacity: props.opacity }}
+    >
       <div className="w-48 animate-pulse rounded-lg bg-gray-400 p-2"></div>
       <div className="animate-pulse rounded-lg bg-gray-300 p-2"></div>
       <div className="w-[15%] animate-pulse rounded-lg bg-gray-300 p-2"></div>

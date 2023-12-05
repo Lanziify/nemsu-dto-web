@@ -34,7 +34,6 @@ function App() {
         <Route path="list/:tab" element={<AdminRequests />} />
         <Route path="list" element={<Navigate replace to="/list/pending" />} />
         <Route path="list/:tab/request/:id" element={<RequestDetails />} />
-        <Route path="notifications/request/:id" element={<RequestDetails />} />
         <Route path="" element={<Navigate replace to="" />} />
       </Route>
 
@@ -53,6 +52,7 @@ function App() {
 
       <Route element={<ProtectedRoutes allowedUser={[true, false]} />}>
         <Route path="notifications" element={<Notifications />} />
+        <Route path="notifications/request/:id" element={<RequestDetails />} />
         <Route path="settings" element={<Settings />} />
         <Route path="profile" element={<Profile />} />
       </Route>

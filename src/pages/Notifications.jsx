@@ -7,7 +7,7 @@ import { readNotification } from "../redux/readNotificationSlice";
 const Notifications = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+
   const { notifications, unread } = useSelector((state) => state.notifications);
 
   const { requests } = useSelector((state) => state.requests);
@@ -16,12 +16,21 @@ const Notifications = () => {
     if (!notification.read) {
       dispatch(readNotification(notification.notificationId));
     }
-    const selected = requests.find((request) => {
-      return request.requestId === notification.data.requestId;
-    });
-    navigate(`/notifications/request/${selected?.requestId}`, {
-      state: selected,
-    });
+
+    if (!notification?.data) {
+      const id = notification.body
+        .slice(notification.body.indexOf("#") + 1)
+        .split(" ")[0];
+      navigate(`/notifications/request/${id}`);
+    } else {
+      const selected = requests.find((request) => {
+        return request.requestId === notification.data.requestId;
+      });
+
+      navigate(`/notifications/request/${selected?.requestId}`, {
+        state: selected,
+      });
+    }
   };
 
   return (
@@ -33,6 +42,6 @@ const Notifications = () => {
       />
     </div>
   );
-}
+};
 
-export default Notifications
+export default Notifications;

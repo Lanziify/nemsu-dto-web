@@ -8,8 +8,9 @@ import { popUpItem } from "../animations/variants";
 import { motion } from "framer-motion";
 import { ERROR } from "../utils/error";
 import { AuthErrorCodes } from "firebase/auth";
+import { IoChevronBack } from "react-icons/io5";
 
-function LoginForm() {
+function LoginForm(props) {
   const { loginUser } = useAuth();
   const [loading, setLoading] = useState(false);
   const [values, setValues] = useState({
@@ -37,7 +38,7 @@ function LoginForm() {
         await loginUser(values.email, values.password);
         setLoading(false);
       } catch (error) {
-        const errorMessage = ERROR.loginError(error, AuthErrorCodes);
+        const errorMessage = ERROR.authError(error, AuthErrorCodes);
         setFirebaseError(errorMessage.firebaseError);
         setLoading(false);
       }
@@ -48,11 +49,21 @@ function LoginForm() {
     <>
       <motion.form
         variants={popUpItem}
-        className="flex w-full max-w-md flex-1 flex-col items-center gap-4 rounded-2xl bg-white px-8 pb-8 pt-6 shadow-sm"
+        className="relative flex w-[24rem] flex-1 flex-col items-center gap-4 rounded-2xl bg-white px-8 pb-8  shadow-sm"
         onSubmit={handleSubmit}
       >
+        {props.cancelable && (
+          <motion.button
+            variants={popUpItem}
+            className="absolute left-4 top-4"
+            type="button"
+            onClick={props.onCancelClick}
+          >
+            <IoChevronBack size={24} />
+          </motion.button>
+        )}
         {/* <div className="h-24 min-w-[96px] rounded-full border bg-gradient-to-br from-cyan-100 to-cyan-500"></div> */}
-        <div className="rounded-full p-2">
+        <div className="mt-6 rounded-full p-2">
           <img src={dtoLogo} alt="DTO logo" className="h-14 w-14" />
         </div>
 

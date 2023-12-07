@@ -20,7 +20,6 @@ function RegistrationForm(props) {
   });
   const [dropdown, setDropdown] = useState(false);
   const [error, setError] = useState({});
-  const [loading, setLoading] = useState(false);
   const dropDownButtonRef = useRef();
   const dropDownContentRef = useRef();
 
@@ -82,7 +81,7 @@ function RegistrationForm(props) {
         text: "User has been successfully registered.",
         showConfirmButton: true,
         confirmButtonText: "Confirm",
-        confirmButtonColor: "#3b82f6",
+        confirmButtonColor: "#0ea5e9",
       });
 
       setValues({
@@ -95,11 +94,10 @@ function RegistrationForm(props) {
     } catch (error) {
       Swal.fire({
         icon: "error",
-        title: "Something went wrong!",
         text: error.message,
         showConfirmButton: true,
         confirmButtonText: "Return",
-        confirmButtonColor: "#3b82f6",
+        confirmButtonColor: "#0ea5e9",
       });
     }
   };

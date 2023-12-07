@@ -8,7 +8,9 @@ const Notifications = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { notifications, unread } = useSelector((state) => state.notifications);
+  const { notifications, isFetchingNotif } = useSelector(
+    (state) => state.notifications
+  );
 
   const { requests } = useSelector((state) => state.requests);
 
@@ -33,15 +35,27 @@ const Notifications = () => {
     }
   };
 
+  if (isFetchingNotif)
+    return (
+      <div className="flex flex-col gap-2">
+        <Skeleton opacity={1} />
+        <Skeleton opacity={0.5} />
+        <Skeleton opacity={0.1} />
+      </div>
+    );
+
   return (
     <div className="rounded-2xl bg-white text-sm ">
       <div className="mb-2 text-2xl font-bold">Notifications</div>
       <DtoNotification
         notifications={notifications}
+        isFetching={isFetchingNotif}
         selectedNotification={(data) => handleSelectedNotification(data)}
       />
     </div>
   );
 };
+
+
 
 export default Notifications;

@@ -18,7 +18,7 @@ import Preloader from "../components/Preloader";
 import { motion } from "framer-motion";
 import { fadeDefault } from "../animations/variants";
 import Portal from "../components/Portal";
-import { getNotifications } from "../redux/notificationSlice";
+import { getNotifications, isFetchingNotif } from "../redux/notificationSlice";
 
 function ProtectedRoutes({ allowedUser }) {
   const { user, userLoading, userToken } = useAuth();
@@ -99,6 +99,7 @@ function ProtectedRoutes({ allowedUser }) {
     if (stringyfiedNotifications) {
       const parsedNotifications = JSON.parse(stringyfiedNotifications);
       dispatch(getNotifications(parsedNotifications));
+      dispatch(isFetchingNotif(fetchingDtoNotifications));
       // dispatch(fetchNotifications(parsedNotifications));
     }
   }, [dtoNotifications]);

@@ -6,6 +6,7 @@ import {
   IoHelpCircleOutline,
   IoLogOutOutline,
   IoNotificationsOutline,
+  IoChatboxOutline,
 } from "react-icons/io5";
 import { BsChatLeftDots } from "react-icons/bs";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -28,7 +29,7 @@ function Navbar(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { notifications, unreads } = useSelector(
+  const { notifications, isFetchingNotif } = useSelector(
     (state) => state.notifications
   );
 
@@ -46,17 +47,17 @@ function Navbar(props) {
     {
       path: "/settings",
       name: "Settings",
-      icon: <IoSettingsOutline size={24} />,
+      icon: <IoSettingsOutline size={18} />,
     },
     {
-      path: "/help",
+      path: null,
       name: "Help",
-      icon: <IoHelpCircleOutline size={24} />,
+      icon: <IoHelpCircleOutline size={18} />,
     },
     {
-      path: "/feedback",
+      path: null,
       name: "Send feedback",
-      icon: <BsChatLeftDots size={20} />,
+      icon: <IoChatboxOutline size={18} />,
     },
   ];
 
@@ -112,9 +113,10 @@ function Navbar(props) {
       setIsProfileToggled(false);
       navigate("/profile");
     } else {
-      setIsProfileToggled(!isNotificationToggled);
+      setIsProfileToggled(!isProfileToggled);
     }
   };
+
 
   const handleSelectedNotification = (notification) => {
     if (!notification.read) {
@@ -274,6 +276,7 @@ function Navbar(props) {
                 <div className="overflow-y-auto p-4">
                   <DtoNotification
                     notifications={notifications}
+                    isFetching={isFetchingNotif}
                     selectedNotification={(data) =>
                       handleSelectedNotification(data)
                     }
@@ -338,7 +341,7 @@ function Navbar(props) {
                   className="mt-2 flex cursor-pointer place-items-center gap-4 rounded-md px-4 py-2 font-semibold  hover:bg-gray-300/50"
                   onClick={handleLogout}
                 >
-                  <IoLogOutOutline size={24} />
+                  <IoLogOutOutline size={18} />
                   <p>Logout</p>
                 </a>
               </div>

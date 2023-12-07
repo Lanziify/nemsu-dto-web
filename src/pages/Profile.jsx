@@ -5,6 +5,7 @@ import {
   IoSettingsOutline,
   IoHelpCircleOutline,
   IoLogOutOutline,
+  IoChatboxOutline,
 } from "react-icons/io5";
 import { BsChatLeftDots } from "react-icons/bs";
 import { useAuth } from "../contexts/AuthContext";
@@ -15,17 +16,17 @@ const Profile = () => {
     {
       path: "/settings",
       name: "Settings",
-      icon: <IoSettingsOutline size={24} />,
+      icon: <IoSettingsOutline size={18} />,
     },
     {
       path: "/help",
       name: "Help",
-      icon: <IoHelpCircleOutline size={24} />,
+      icon: <IoHelpCircleOutline size={18} />,
     },
     {
       path: "/feedback",
       name: "Send feedback",
-      icon: <BsChatLeftDots size={20} />,
+      icon: <IoChatboxOutline size={18} />,
     },
   ];
   async function handleLogout() {
@@ -54,7 +55,7 @@ const Profile = () => {
           <NavLink
             key={index}
             to={item.path}
-            className="flex cursor-pointer place-items-center gap-4 rounded-md px-4 py-2 font-semibold hover:bg-gray-300/50"
+            className="flex cursor-pointer place-items-center gap-4 rounded-md px-4 py-2 text-sm font-semibold hover:bg-gray-300/50"
           >
             <div>{item.icon}</div>
             <p>{item.name}</p>
@@ -63,10 +64,10 @@ const Profile = () => {
       </div>
       <hr />
       <a
-        className="mt-2 flex cursor-pointer place-items-center gap-4 rounded-md px-4 py-2 font-semibold  hover:bg-gray-300/50"
+        className="mt-2 flex cursor-pointer place-items-center gap-4 rounded-md px-4 py-2 text-sm font-semibold  hover:bg-gray-300/50"
         onClick={handleLogout}
       >
-        <IoLogOutOutline size={24} />
+        <IoLogOutOutline size={18} />
         <p>Logout</p>
       </a>
     </div>

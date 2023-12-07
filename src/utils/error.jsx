@@ -1,5 +1,5 @@
 export const ERROR = {
-  loginError: (error, AuthErrorCodes) => {
+  authError: (error, AuthErrorCodes) => {
     const errorMessage = {};
     switch (error.code) {
       case AuthErrorCodes.INVALID_PASSWORD:

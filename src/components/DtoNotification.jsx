@@ -8,7 +8,7 @@ function DtoNotification(props) {
   //   (a, b) => b.createdAt._seconds - a.createdAt._seconds
   // );
 
-  if (notifications.length === 0)
+  if (props.isFetching)
     return (
       <div className="flex flex-col gap-2">
         <Skeleton opacity={1} />
@@ -16,7 +16,10 @@ function DtoNotification(props) {
         <Skeleton opacity={0.1} />
       </div>
     );
-    
+
+  if (notifications.length === 0)
+    return <p>You don't have any notifications right now</p>;
+
   return (
     <>
       {notifications.map((notification, index) => (

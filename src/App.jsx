@@ -9,7 +9,7 @@ import Hero from "./pages/Hero";
 import Notfound from "./pages/Notfound";
 // Import user pages
 import Home from "./pages/user/Home";
-import Settings from "./pages/user/Settings";
+import Settings from "./pages/Settings";
 import UserRequests from "./pages/user/Requests";
 import History from "./pages/user/History";
 // Import admin pages
@@ -20,6 +20,7 @@ import AdminRequests from "./pages/admin/Requests";
 import Notifications from "./pages/Notifications";
 import RequestDetails from "./pages/RequestDetails";
 import Profile from "./pages/Profile";
+import ChangePassword from "./pages/ChangePassword";
 
 function App() {
   return (
@@ -54,6 +55,7 @@ function App() {
         <Route path="notifications" element={<Notifications />} />
         <Route path="notifications/request/:id" element={<RequestDetails />} />
         <Route path="settings" element={<Settings />} />
+        <Route path="settings/:option" element={<ChangePassword />} />
         <Route path="profile" element={<Profile />} />
       </Route>
       <Route path="*" element={<Notfound />} />

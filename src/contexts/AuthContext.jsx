@@ -13,10 +13,10 @@ export function AuthContextProvider({ children }) {
   const [userToken, setUserToken] = useState(null);
   // Login user with email and password
   async function loginUser(email, password) {
-    setUserLoading(true);
-    return signInWithEmailAndPassword(auth, email, password).then(() => {
-      setUserLoading(false);
-    });
+    return signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        setUserLoading(false);
+      })
   }
   // Logout user
   async function logoutUser() {
@@ -35,7 +35,6 @@ export function AuthContextProvider({ children }) {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setUserLoading(false);
-
       if (currentUser) {
         // Fetch the user's profile data
         currentUser

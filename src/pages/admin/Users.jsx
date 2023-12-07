@@ -89,7 +89,7 @@ function SkeletonLoading() {
         <div className="h-10 w-36 rounded bg-gray-200"></div>
       </div>
       <div className="mb-4 h-10 animate-pulse rounded-full bg-gray-200"></div>
-      <div className="mb-1 flex animate-pulse items-center gap-16 opacity-50">
+      <div className="mb-1 flex animate-pulse items-center gap-4 opacity-50">
         <div className="h-5 flex-1 rounded bg-gray-200"></div>
         <div className="h-5 flex-1 rounded bg-gray-200"></div>
         <div className="h-5 flex-1 rounded bg-gray-200"></div>

@@ -1,8 +1,7 @@
 export const Validation = {
   validateLogin: (values) => {
     const errorMessage = {};
-    const regex =
-      /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+    const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 
     // Login form validitions
     // Email validation
@@ -22,6 +21,7 @@ export const Validation = {
     const errorMessage = {};
     const emailRegex =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
     if (!values.name) {
       errorMessage.name = "Name is required.";
     }
@@ -40,6 +40,8 @@ export const Validation = {
     // Password validation
     if (!values.password) {
       errorMessage.password = "Password is required.";
+    } else if (!passwordRegex.test(values.password)) {
+      errorMessage.password = "Password must be eight characters long, at least one letter and one number";
     }
 
     return errorMessage;
@@ -73,6 +75,27 @@ export const Validation = {
     }
     if (!values.equipment) {
       errorMessage.equipment = "Please specify the type of equipment.";
+    }
+
+    return errorMessage;
+  },
+
+  validatePasswordReset: (values) => {
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
+    const errorMessage = {};
+
+    if (!values.current) {
+      errorMessage.currentPassword = "Please enter your current password";
+    }
+    
+    if (!values.new) {
+      errorMessage.newPassword = "Please enter your new password";
+    } else if (!passwordRegex.test(values.new)) {
+      errorMessage.newPassword = "Password must be eight characters long, at least one letter and one number";
+    }
+
+    if (!values.confirm || values.new != values.confirm) {
+      errorMessage.confirmPassword = "Password does not match";
     }
 
     return errorMessage;

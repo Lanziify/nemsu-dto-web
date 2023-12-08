@@ -1,7 +1,11 @@
 module.exports = {
   content: ["./src/**/*.{html,jsx,js,tsx,ts}", "./index.html"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        custom: ["old-style", "san-serif"]
+      }
+    },
     screens: {
       'sm': '428px',
       // => @media (min-width: 576px) { ... }

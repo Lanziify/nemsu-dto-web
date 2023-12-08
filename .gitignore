@@ -16,6 +16,7 @@ dist-ssr
 .firebaserc
 firebase.json
 .firebase
+firebase-messaging-sw.js
 
 # Editor directories and files
 .vscode/*

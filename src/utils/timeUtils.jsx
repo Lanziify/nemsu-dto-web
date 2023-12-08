@@ -41,3 +41,19 @@ export function getTimeAgo(createdAt) {
     return "now";
   }
 }
+
+export const getFormattedDate = (unixValue) => {
+  const convert = new Date(unixValue * 1000);
+
+  return convert
+    .toLocaleString("en-PH", {
+      hour: "2-digit",
+      minute: "2-digit",
+      day: "numeric",
+      month: "2-digit",
+      year: "2-digit",
+    })
+    .replaceAll("/", "-")
+    .replace(",", "")
+    .replace("PM", "");
+};

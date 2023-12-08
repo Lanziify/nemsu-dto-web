@@ -58,7 +58,7 @@ function DoughnutChart({requests}) {
   const options = {
 
     responsive: true,
-    cutout: 45,
+    cutout: 35,
     plugins: {
       legend: {
         position: "bottom",
@@ -75,7 +75,7 @@ function DoughnutChart({requests}) {
       datalabels: {
         clamp: true,
         anchor: "end",
-        align: "end",
+        align: "center",
         font: {
           weight: "bold",
         },

@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { MdChevronLeft } from "react-icons/md";
 import { FaPencilAlt } from "react-icons/fa";
 import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import RequestProgress from "../components/RequestProgress";
-import { convertCreatedDate, getTimeAgo } from "../utils/timeUtils";
+import {
+  convertCreatedDate,
+  getTimeAgo,
+  getFormattedDate,
+} from "../utils/timeUtils";
 import DtoButton from "../components/DtoButton";
 import Swal from "sweetalert2";
 import ApiService from "../api/apiService";
@@ -17,11 +21,17 @@ import { useDocumentData } from "react-firebase-hooks/firestore";
 import { firestore } from "../config/firebase-config";
 import { doc } from "firebase/firestore";
 import Preloader from "../components/Preloader";
+import ReactToPrint from "react-to-print";
+import DtoPrintDoc from "../components/DtoPrintDoc";
 
 export default function RequestDetails() {
   const { isAdmin } = useOutletContext();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const printableRef = useRef(null);
+  const printButtonRef = useRef();
+
   const currentRequestId = location.pathname.substring(
     location.pathname.lastIndexOf("/") + 1
   );
@@ -156,6 +166,8 @@ export default function RequestDetails() {
       console.log(error);
     }
   };
+
+  const handlePrintDownloadClick = () => {};
 
   if (tuple[1] != isResponding) {
     setTuple([tuple[1], isResponding]);
@@ -292,29 +304,56 @@ export default function RequestDetails() {
 
           <AnimatePresence>
             {currentRequest?.status === COMPLETED ? (
-              <motion.div
-                variants={popUpItem}
-                className="rounded-2xl bg-cyan-500 p-6 text-sm text-white shadow-sm"
-              >
-                <h1 className="mb-2 text-xl font-bold">Action Details</h1>
-                {requestResponse.map((item, index) => (
-                  <div
-                    cell={item.cell}
-                    className={`flex w-full justify-between text-white before:font-semibold before:text-white before:content-[attr(cell)] ${
-                      item.cell === "Defects/Complaints"
-                        ? "flex-col gap-1"
-                        : "mb-1"
-                    }`}
-                    key={index}
-                  >
-                    {item.data}
-                  </div>
-                ))}
-              </motion.div>
+              <>
+                <motion.div
+                  variants={popUpItem}
+                  className="rounded-2xl bg-cyan-500 p-6 text-sm text-white shadow-sm"
+                >
+                  <h1 className="mb-2 text-xl font-bold">Action Details</h1>
+                  {requestResponse.map((item, index) => (
+                    <div
+                      cell={item.cell}
+                      className={`flex w-full justify-between text-white before:font-semibold before:text-white before:content-[attr(cell)] ${
+                        item.cell === "Defects/Complaints"
+                          ? "flex-col gap-1"
+                          : "mb-1"
+                      }`}
+                      key={index}
+                    >
+                      {item.data}
+                    </div>
+                  ))}
+                </motion.div>
+                <motion.div
+                  variants={popUpItem}
+                  type="button"
+                  onClick={handlePrintDownloadClick}
+                  className="w-full"
+                >
+                  <ReactToPrint
+                    // pageStyle="@page { magin: 0; size: auto; }"
+                    trigger={() => {
+                      return (
+                        <button
+                          className="w-full rounded-lg bg-cyan-500 p-2 text-sm font-bold text-white transition-all duration-300 hover:bg-cyan-600"
+                          type="button"
+                          ref={printButtonRef}
+                        >
+                          Print / Download Record
+                        </button>
+                      );
+                    }}
+                    content={() => printableRef.current}
+                  />
+                </motion.div>
+              </>
             ) : (
               ""
             )}
           </AnimatePresence>
+          <div className="invisible hidden">
+            <DtoPrintDoc request={request} ref={printableRef} />
+          </div>
         </div>
       ) : fetching && !error ? (
         <Preloader />

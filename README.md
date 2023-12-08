@@ -1,8 +1,8 @@
-# Digital Transformation Office System
+# Digital Transformation Office
 
 ## Overview
 
-The Digital Transformation Office System is an innovative solution implemented at North Eastern Mindanao - Tagbina Campus, designed to streamline and enhance the process of handling repair requisitions for ICT-related issues across various school offices. This system facilitates a seamless communication channel between different offices and the ICT department, ensuring efficient and timely resolution of technical problems.
+The Digital Transformation Office is an innovative solution implemented at North Eastern Mindanao - Tagbina Campus, designed to streamline and enhance the process of handling repair requisitions for ICT-related issues across various school offices. This system facilitates a seamless communication channel between different offices and the ICT department, ensuring efficient and timely resolution of technical problems.
 
 ## Key Features
 

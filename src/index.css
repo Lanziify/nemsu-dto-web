@@ -6,6 +6,11 @@ body {
   overflow-y: scroll;
 }
 
+@font-face {
+  font-family: 'old-style';
+  src: url(./assets/fonts/Old_English_Text_MT.ttf) format('truetype');
+}
+
 * {
   margin: 0;
   padding: 0;

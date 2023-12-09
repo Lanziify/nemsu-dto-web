@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+img, embed, object { display: initial; vertical-align: initial; }
+
 body {
   overflow-y: scroll;
 }

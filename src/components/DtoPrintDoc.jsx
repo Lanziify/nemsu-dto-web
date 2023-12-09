@@ -109,16 +109,16 @@ const DtoPrintDoc = forwardRef((props, ref) => {
             <p>Tagbina, Surigao del Sur, 8308</p>
             <p>Website: www.nemsu.edu.ph</p>
           </div>
-          <div className="grid grid-cols-2 text-[8px]">
-            {headerRight.map((block) => (
-              <>
+          <div className="flex flex-col text-[8px]">
+            {headerRight.map((block, index) => (
+              <div key={index} className="flex-grow grid grid-cols-2">
                 <div className="flex w-24 items-center justify-end border-b border-r border-black p-1">
                   {block.item}
                 </div>
                 <div className="flex w-24 items-center justify-end border-b border-black p-1">
                   {block.value}
                 </div>
-              </>
+              </div>
             ))}
           </div>
         </div>
@@ -193,7 +193,7 @@ const DtoPrintDoc = forwardRef((props, ref) => {
           </div>
         </div>
       </div>
-      <div className="absolute bottom-0 right-0 font-sans m-12 text-xs text-gray-500">FM-ICTO-002/Rev 001/01-26-23/1 of 1</div>
+      <div className="float-right font-sans p-12 text-xs text-gray-500">FM-ICTO-002/Rev 001/01-26-23/1 of 1</div>
     </div>
   );
 });

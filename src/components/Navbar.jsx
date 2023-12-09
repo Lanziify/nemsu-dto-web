@@ -117,7 +117,6 @@ function Navbar(props) {
     }
   };
 
-
   const handleSelectedNotification = (notification) => {
     if (!notification.read) {
       dispatch(readNotification(notification.notificationId));

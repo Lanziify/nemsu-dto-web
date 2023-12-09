@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MdChevronLeft } from "react-icons/md";
 import { FaPencilAlt } from "react-icons/fa";
 import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
@@ -21,8 +21,9 @@ import { useDocumentData } from "react-firebase-hooks/firestore";
 import { firestore } from "../config/firebase-config";
 import { doc } from "firebase/firestore";
 import Preloader from "../components/Preloader";
-import ReactToPrint from "react-to-print";
+import ReactToPrint, { useReactToPrint } from "react-to-print";
 import DtoPrintDoc from "../components/DtoPrintDoc";
+import html2pdf from 'html2pdf.js';
 
 export default function RequestDetails() {
   const { isAdmin } = useOutletContext();
@@ -31,6 +32,8 @@ export default function RequestDetails() {
 
   const printableRef = useRef(null);
   const printButtonRef = useRef();
+
+  const [isMobileView, setIsMobileView] = useState(false);
 
   const currentRequestId = location.pathname.substring(
     location.pathname.lastIndexOf("/") + 1
@@ -167,8 +170,6 @@ export default function RequestDetails() {
     }
   };
 
-  const handlePrintDownloadClick = () => {};
-
   if (tuple[1] != isResponding) {
     setTuple([tuple[1], isResponding]);
   }
@@ -178,6 +179,36 @@ export default function RequestDetails() {
   if (currentRequest?.status != ACCEPTED && isResponding) {
     setIsResponding(false);
   }
+
+
+  const handleConvertPdf = useReactToPrint({
+    content: () => printableRef.current,
+    documentTitle: `${request?.requestId.toUpperCase()}.pdf`,
+    copyStyles: true,
+    print: async (printIframe) => {
+      const document = printIframe.contentDocument;
+      if (document) {
+        const html = document.getElementsByTagName("html")[0];
+        await html2pdf().from(html).save(`${request?.requestId.toUpperCase()}.pdf`);
+      }
+    },
+  });
+
+  useEffect(() => {
+    const cleanUp = () => {
+      if (window.innerWidth <= 960) {
+        setIsMobileView(true);
+      } else {
+        setIsMobileView(false);
+      }
+    };
+
+    cleanUp();
+
+    return () => {
+      cleanUp();
+    };
+  }, []);
 
   return (
     <>
@@ -303,7 +334,7 @@ export default function RequestDetails() {
           </AnimatePresence>
 
           <AnimatePresence>
-            {currentRequest?.status === COMPLETED ? (
+            {currentRequest?.status === COMPLETED && (
               <>
                 <motion.div
                   variants={popUpItem}
@@ -327,28 +358,35 @@ export default function RequestDetails() {
                 <motion.div
                   variants={popUpItem}
                   type="button"
-                  onClick={handlePrintDownloadClick}
                   className="w-full"
                 >
-                  <ReactToPrint
-                    // pageStyle="@page { magin: 0; size: auto; }"
-                    trigger={() => {
-                      return (
-                        <button
-                          className="w-full rounded-lg bg-cyan-500 p-2 text-sm font-bold text-white transition-all duration-300 hover:bg-cyan-600"
-                          type="button"
-                          ref={printButtonRef}
-                        >
-                          Print / Download Record
-                        </button>
-                      );
-                    }}
-                    content={() => printableRef.current}
-                  />
+                  {!isMobileView ? (
+                    <ReactToPrint
+                      // pageStyle="@page { magin: 0; size: auto; }"
+                      trigger={() => {
+                        return (
+                          <button
+                            className="w-full rounded-lg bg-cyan-500 p-2 text-sm font-bold text-white transition-all duration-300 hover:bg-cyan-600"
+                            type="button"
+                            ref={printButtonRef}
+                          >
+                            Print / Download Record
+                          </button>
+                        );
+                      }}
+                      content={() => printableRef.current}
+                    />
+                  ) : (
+                    <button
+                      className="w-full rounded-lg bg-cyan-500 p-2 text-sm font-bold text-white transition-all duration-300 hover:bg-cyan-600"
+                      type="button"
+                      onClick={handleConvertPdf}
+                    >
+                      Print / Download Record
+                    </button>
+                  )}
                 </motion.div>
               </>
-            ) : (
-              ""
             )}
           </AnimatePresence>
           <div className="invisible hidden">

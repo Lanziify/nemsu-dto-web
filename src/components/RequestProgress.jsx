@@ -1,35 +1,20 @@
 import React from "react";
 import { FaClipboardList, FaThumbsUp, FaCheck } from "react-icons/fa";
+import { getFormattedDate } from "../utils/timeUtils";
 
 function RequestProgress({ request }) {
-  const convertCreatedDate = (unixValue) => {
-    const convert = new Date(unixValue * 1000);
-
-    return convert
-      .toLocaleString("en-PH", {
-        hour: "2-digit",
-        minute: "2-digit",
-        day: "numeric",
-        month: "2-digit",
-        year: "2-digit",
-      })
-      .replaceAll("/", "-")
-      .replace(",", "")
-      .replace('PM', "");
-  };
-
   const progressItems = [
     {
       title: "Form Submitted",
       icon: <FaClipboardList size={32} />,
-      date: convertCreatedDate(request?.createdAt.seconds),
+      date: getFormattedDate(request?.createdAt.seconds),
       active: true,
     },
     {
       title: "Details Accepted",
       icon: <FaThumbsUp size={32} />,
       date: request?.updatedAt?.seconds
-        ? convertCreatedDate(request?.updatedAt?.seconds)
+        ? getFormattedDate(request?.updatedAt?.seconds)
         : "---",
       active: request?.updatedAt?.seconds ? true : false,
     },
@@ -37,7 +22,7 @@ function RequestProgress({ request }) {
       title: "Request Completed",
       icon: <FaCheck size={32} />,
       date: request?.completedAt?.seconds
-        ? convertCreatedDate(request?.completedAt?.seconds)
+        ? getFormattedDate(request?.completedAt?.seconds)
         : "---",
       active: request?.completedAt?.seconds ? true : false,
     },

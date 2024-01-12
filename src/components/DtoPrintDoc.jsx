@@ -102,7 +102,7 @@ const DtoPrintDoc = forwardRef((props, ref) => {
           </div>
           <div className="flex flex-grow flex-col items-center justify-center border-b border-r border-black text-[10px] ">
             <p>Republic of the Philippines</p>
-            <h1 className="font-custom text-[20px] font-bold">
+            <h1 className="font-custom text-[18px] font-bold">
               North Eastern Mindanao State University
             </h1>
             <p>Tagbina Campus</p>

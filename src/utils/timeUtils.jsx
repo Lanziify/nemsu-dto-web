@@ -55,5 +55,6 @@ export const getFormattedDate = (unixValue) => {
     })
     .replaceAll("/", "-")
     .replace(",", "")
-    .replace("PM", "");
+    .replace("PM", "")
+    .replace("AM", "");
 };

@@ -1,12 +1,27 @@
 import React from "react";
 import getTimeAgo from "../utils/getTimeAgo";
+import { MdDelete } from "react-icons/md";
+import { firestore } from "../config/firebase-config";
+import { collection, query, deleteDoc, where, doc } from "firebase/firestore";
 
 function DtoNotification(props) {
   const { notifications, selectedNotification } = props;
 
-  // const sortedNotifications = [...notifications].sort(
-  //   (a, b) => b.createdAt._seconds - a.createdAt._seconds
+  const dtoNotificatonsRef = collection(firestore, "notifications");
+
+  // const deleteNotificationQuery = query(
+  //   dtoNotificatonsRef,
+  //   where("notificationId", "==", user ? user.uid : null),
   // );
+
+  const deleteNotification = async (e, values) => {
+    e.stopPropagation();
+    try {
+      await deleteDoc(doc(dtoNotificatonsRef, values.notificationId))
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   if (props.isFetching)
     return (
@@ -24,7 +39,7 @@ function DtoNotification(props) {
     <>
       {notifications.map((notification, index) => (
         <div
-          className="relative cursor-pointer rounded-xl text-sm hover:bg-black/5"
+          className="group cursor-pointer rounded-xl text-sm hover:bg-black/5"
           key={index}
           onClick={() => {
             selectedNotification(notification);
@@ -55,9 +70,19 @@ function DtoNotification(props) {
                 {getTimeAgo(notification.createdAt?.seconds)}
               </p>
             </div>
-            {!notification?.read && (
-              <div className=" h-2 w-2 rounded-full bg-cyan-500"></div>
-            )}
+            <div className="relative">
+              <div
+                className="absolute bottom-0 right-5 top-0 m-auto h-8 w-8 items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 group-hover:flex max-sm:flex lg:hidden"
+                onClick={(e) => deleteNotification(e, notification)}
+              >
+                <MdDelete size={18} />
+              </div>
+              <div className="h-3 w-3 ">
+                {!notification?.read && (
+                  <div className="h-full w-full rounded-full bg-cyan-500"></div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       ))}

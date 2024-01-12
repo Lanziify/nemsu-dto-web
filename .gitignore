@@ -13,6 +13,7 @@ dist
 dist-ssr
 *.local
 
+.github
 .firebaserc
 firebase.json
 .firebase

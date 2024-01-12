@@ -8,9 +8,18 @@ function AnimatedNumber(props) {
     delay: 0,
     config: { mass: 2.3, tension: 18, friction: 12.5 },
   });
-  return (
-    <animated.div className={`font-mono ${props.className}`}>{num.to((n) => n.toFixed(0))}</animated.div>
-  );
+
+  const formattedNumber = num.to((n) => {
+    if (n < 1000) {
+      return n.toFixed(0);
+    } else if (n < 1000000) {
+      return n % 1000 === 0 ? (n / 1000).toFixed(0) + "k" : (n / 1000).toFixed(1) + "k";
+    } else {
+      return n % 1000000 === 0 ? (n / 1000000).toFixed(0) + "m" : (n / 1000000).toFixed(1) + "m";
+    }
+  });
+
+  return <animated.div className={`font-mono ${props.className}`}>{formattedNumber}</animated.div>;
 }
 
 export default AnimatedNumber;

@@ -13,7 +13,7 @@ export const ERROR = {
         errorMessage.firebaseError = "User does not exist.";
         break;
       default:
-        errorMessage.firebaseError = "Oops! Something went wrong.";
+        errorMessage.firebaseError = "Invalid email address or password. Please try again.";
         break;
     }
     return errorMessage;

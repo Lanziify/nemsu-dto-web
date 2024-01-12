@@ -3,7 +3,6 @@ import RegistrationForm from "../../components/RegistrationForm";
 import { useAuth } from "../../contexts/AuthContext";
 import UserTableList from "../../components/UserTableList";
 import DtoButton from "../../components/DtoButton";
-import { AnimatePresence } from "framer-motion";
 import DtoSearchBar from "../../components/DtoSearchBar";
 import ApiService from "../../api/apiService";
 import { MdPeople } from "react-icons/md";
@@ -13,7 +12,7 @@ import { getUsers } from "../../redux/usersListSlice";
 const Users = () => {
   const { user } = useAuth();
   const dispatch = useDispatch();
-  const { users } = useSelector((state) => state.usersList);
+  const { users, loading } = useSelector((state) => state.usersList);
   const [registerUser, setRegisterUser] = useState(false);
   const [search, setSearch] = useState([]);
 
@@ -50,7 +49,7 @@ const Users = () => {
     );
   };
 
-  if (users.length === 0) return <SkeletonLoading />;
+  if (loading) return <SkeletonLoading />;
 
   return (
     <div className="flex flex-col gap-4">

@@ -9,10 +9,10 @@ import store from "./redux/store.jsx";
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker
-    .register("../firebase-messaging-sw.js")
+    .register("/firebase-messaging-sw.js", { scope: '/' })
     .catch(function (err) {
       console.log("Service worker registration failed", err);
-    });
+    })
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(

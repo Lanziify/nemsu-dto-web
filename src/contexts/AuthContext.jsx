@@ -13,10 +13,12 @@ export function AuthContextProvider({ children }) {
   const [userToken, setUserToken] = useState(null);
   // Login user with email and password
   async function loginUser(email, password) {
-    return signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        setUserLoading(false);
-      })
+try {
+  await signInWithEmailAndPassword(auth, email, password)
+  setUserLoading(false);
+} catch (error) {
+  throw error
+}
   }
   // Logout user
   async function logoutUser() {

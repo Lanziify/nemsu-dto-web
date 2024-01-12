@@ -1,27 +1,27 @@
+import { regex } from "../strings/regex";
+
 export const Validation = {
   validateLogin: (values) => {
     const errorMessage = {};
-    const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
-
     // Login form validitions
     // Email validation
     if (!values.email) {
       errorMessage.email = "Email is required";
-    } else if (!regex.test(values.email)) {
+    } else if (!regex.email.test(values.email)) {
       errorMessage.email = "Please enter a valid email address";
     }
     // Password validation
     if (!values.password) {
       errorMessage.password = "Password is required";
+    }else if (!regex.password.test(values.password)) {
+      errorMessage.password = "Password must be eight characters long, at least one letter and one number";
     }
     return errorMessage;
   },
 
   validateRegistration: (values) => {
     const errorMessage = {};
-    const emailRegex =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
+
     if (!values.name) {
       errorMessage.name = "Name is required.";
     }
@@ -34,16 +34,15 @@ export const Validation = {
     // Request form validations
     if (!values.email) {
       errorMessage.email = "Email is required.";
-    } else if (!emailRegex.test(values.email)) {
+    } else if (!regex.email.test(values.email)) {
       errorMessage.email = "Please enter a valid email address.";
     }
     // Password validation
     if (!values.password) {
       errorMessage.password = "Password is required.";
-    } else if (!passwordRegex.test(values.password)) {
+    } else if (!regex.password.test(values.password)) {
       errorMessage.password = "Password must be eight characters long, at least one letter and one number";
     }
-
     return errorMessage;
   },
 
@@ -81,7 +80,6 @@ export const Validation = {
   },
 
   validatePasswordReset: (values) => {
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
     const errorMessage = {};
 
     if (!values.current) {
@@ -90,7 +88,7 @@ export const Validation = {
     
     if (!values.new) {
       errorMessage.newPassword = "Please enter your new password";
-    } else if (!passwordRegex.test(values.new)) {
+    } else if (!regex.password.test(values.new)) {
       errorMessage.newPassword = "Password must be eight characters long, at least one letter and one number";
     }
 

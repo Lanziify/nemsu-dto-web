@@ -4,14 +4,19 @@
 
 img, embed, object { display: initial; vertical-align: initial; }
 
-body {
-  overflow-y: scroll;
-}
-
 @font-face {
   font-family: 'old-style';
   src: url(./assets/fonts/Old_English_Text_MT.ttf) format('truetype');
 }
+
+body, html {
+  overscroll-behavior: none;
+}
+
+body {
+  overflow-y: scroll;
+}
+
 
 * {
   margin: 0;
@@ -39,6 +44,10 @@ body {
 .dto-no-scroll {
   height: auto !important;
   overflow: hidden;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
 }
 
 @media not all and (min-width: 960px) {

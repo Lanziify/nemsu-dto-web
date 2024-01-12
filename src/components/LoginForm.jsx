@@ -38,6 +38,7 @@ function LoginForm(props) {
         await loginUser(values.email, values.password);
         setLoading(false);
       } catch (error) {
+        console.log(error);
         const errorMessage = ERROR.authError(error, AuthErrorCodes);
         setFirebaseError(errorMessage.firebaseError);
         setLoading(false);
@@ -72,7 +73,7 @@ function LoginForm(props) {
             variants={popUpItem}
             className="w-full rounded-md bg-red-500 p-1 text-center"
           >
-            <span className="text-white">{firebaseError}</span>
+            <span className="text-xs text-white">{firebaseError}</span>
           </motion.div>
         )}
         <FormInput

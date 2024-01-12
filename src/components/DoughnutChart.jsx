@@ -62,10 +62,12 @@ function DoughnutChart({requests}) {
     plugins: {
       legend: {
         position: "bottom",
-        textAlign: "left",
         labels: {
           usePointStyle: true,
-          boxWidth: 20,
+          textAlign: "center",
+          font: {
+            size: 8
+          }
         },
       },
       title: {
@@ -80,8 +82,7 @@ function DoughnutChart({requests}) {
           weight: "bold",
         },
         formatter: function(value, context) {
-          return value + ", " +  calculatePercentage(value, requests.length) + '%';
-
+          return   calculatePercentage(value, requests.length) + '%';
         }
       },
     },

@@ -10,7 +10,7 @@ const usersListSlice = createSlice({
   reducers: {
     getUsers: (state, action) => {
       state.users = action.payload;
-      state.loading = action.payload;
+      state.loading = false;
       state.error = action.payload;
     },
   },

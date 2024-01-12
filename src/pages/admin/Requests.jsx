@@ -18,6 +18,7 @@ import { ACCEPTED, CANCELED, COMPLETED, PENDING } from "../../utils/status";
 import Preloader from "../../components/Preloader";
 import DtoSearchBar from "../../components/DtoSearchBar";
 import { filterItems } from "../../utils/filterItems";
+import { FaHourglassHalf, FaThumbsUp, FaCheckDouble } from "react-icons/fa";
 
 export default function Requests() {
   const location = useLocation();
@@ -42,9 +43,13 @@ export default function Requests() {
   const [searchedRequest, setSearchedRequest] = useState();
 
   const status = [
-    { status: PENDING, style: "bg-yellow-500" },
-    { status: ACCEPTED, style: "bg-teal-500" },
-    { status: COMPLETED, style: "bg-cyan-500" },
+    { status: PENDING, style: "bg-yellow-500", icon: <FaHourglassHalf /> },
+    { status: ACCEPTED, style: "bg-teal-500", icon: <FaThumbsUp /> },
+    {
+      status: COMPLETED,
+      style: "bg-cyan-500",
+      icon: <FaCheckDouble />,
+    },
   ];
 
   const tabItems = [
@@ -159,25 +164,30 @@ export default function Requests() {
 
   return !fetchingRequests ? (
     <>
-      <div className="mb-4 grid grid-cols-3 gap-4 [&>div]:rounded-2xl [&>div]:border">
-        <div className="col-span-2 h-56 overflow-hidden bg-white p-1 max-sm:col-span-full max-sm:p-0">
+      <div className="mb-4 grid grid-cols-3 gap-4 [&>div]:rounded-2xl [&>div]:border [&>div]:max-sm:col-span-full">
+        <div className="col-span-2 h-56 overflow-hidden bg-white max-sm:col-span-full max-sm:p-0">
           <LineChart requests={requests} />
         </div>
-        <div className="flex h-56 flex-1 items-center justify-center bg-whit max-sm:col-span-full">
+        <div className="bg-whit flex h-56 flex-1 items-center justify-center max-sm:col-span-full">
           <DoughnutChart requests={requests} />
         </div>
         {status.map((item, index) => (
           <div
-            className={`h-fit flex-1 p-4 text-center text-white ${item.style}`}
+            className={`border-none p-4 text-white ${item.style}`}
             key={index}
           >
-            <AnimatedNumber
-              number={getStatusTotal(item.status)}
-              className="text-6xl font-bold"
-            />
-            <p className="mb-2 text-xs font-bold">
-              {item.status} Requests
-            </p>
+            <p className="text-xs font-bold">Total {item.status}</p>
+            <div className="flex items-center justify-between">
+              <div className="flex flex-col items-start gap-1">
+                <div className="rounded-full border-2 bg-black/10 p-3">
+                  {item.icon}
+                </div>
+              </div>
+              <AnimatedNumber
+                number={getStatusTotal(item.status)}
+                className="text-6xl font-bold"
+              />
+            </div>
           </div>
         ))}
       </div>

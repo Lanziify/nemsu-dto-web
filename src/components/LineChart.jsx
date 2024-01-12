@@ -23,8 +23,9 @@ ChartJS.register(
 );
 
 function LineChart({ requests }) {
-  const [showLabels, setShowLabels] = useState(window.innerWidth >= 428);
   const requestCountsByMonth = {};
+
+  var dataArray = [4, 6, 10, 14, 13, 20, 10, 12, 8, 12, 10, 9];
 
   const MONTHS = [
     "Jan",
@@ -40,19 +41,18 @@ function LineChart({ requests }) {
     "Nov",
     "Dec",
   ];
-  
 
-  useEffect(() => {
-    const handleResize = () => {
-      setShowLabels(window.innerWidth >= 428);
-    };
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     setShowLabels(window.innerWidth >= 428);
+  //   };
 
-    window.addEventListener("resize", handleResize);
+  //   window.addEventListener("resize", handleResize);
 
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener("resize", handleResize);
+  //   };
+  // }, []);
 
   //   const sortedRequest = [...requests].sort((a, b) => {
   //     return a.createdAt._seconds - b.createdAt._seconds;
@@ -78,19 +78,20 @@ function LineChart({ requests }) {
       datasets: [
         {
           label: "Request",
-          data: [4, 6, 10, 14, 13, 20, 10, 12, 8, 12, 10, 9],
-          borderColor: "#06b6d4",
+          data: dataArray,
           backgroundColor: (context) => {
             const ctx = context.chart.ctx;
-            const gradient = ctx.createLinearGradient(0, 0, 0, 180);
+            const gradient = ctx.createLinearGradient(0, 0, 0, 160);
             gradient.addColorStop(0, "#06b6d4");
-            gradient.addColorStop(1, "#5eead420");
+            gradient.addColorStop(1, "#5eead400");
             return gradient;
           },
           fill: "start",
-          tension: 0.4,
-          borderWidth: 0,
-          pointColor: "white",
+          tension: 0.3,
+          // pointBorderColor: "transparent",
+          // pontBorderRadius: 4,
+          // pointColor: "white",
+          borderColor: "#06b6d4",
         },
       ],
     };
@@ -98,7 +99,8 @@ function LineChart({ requests }) {
 
   const options = {
     layout: {
-      autoPadding: false,
+      autoPadding: true,
+      padding: 16,
     },
     plugins: {
       filler: {
@@ -107,7 +109,6 @@ function LineChart({ requests }) {
       title: {
         display: true,
         text: "Monthly Number of Requests",
-        // padding: 20,
       },
       legend: {
         display: false,
@@ -119,25 +120,25 @@ function LineChart({ requests }) {
     elements: {
       point: {
         radius: 5,
-        backgroundColor: "#06b6d4",
+        backgroundColor: "transparent",
       },
     },
     responsive: true,
     maintainAspectRatio: false,
     scales: {
       x: {
-        display: showLabels ? true : false,
+        display: true,
         grid: {
           display: false,
         },
         border: {
           display: false,
         },
-        // display: false,
       },
       y: {
         beginAtZero: true,
-        display: showLabels ? true : false,
+        display: true,
+        max: Math.max(...dataArray) + 5,
         border: {
           display: false,
         },

@@ -73,8 +73,7 @@ function Navbar(props) {
     const permission = await Notification.requestPermission();
     if (permission === "granted") {
       const token = await getToken(messaging, {
-        vapidKey:
-          "BItYMIPmv1rk5OeMPmz2__C1LaALFQZs-eRDr0JojHd8Hj3PyelNHMz5xzGgH-j1jRLecKyMVDP_wiRceSQvbDo",
+        vapidKey: import.meta.env.VITE_REACT_APP_VAPIKEY,
       });
       await ApiService.updateFcm(user.uid, token);
     } else {
